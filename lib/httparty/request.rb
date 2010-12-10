@@ -133,6 +133,10 @@ module HTTParty
 
     def setup_raw_request
       @raw_request = if options[:multipart]
+        options[:query].each do |param, value|
+          options[:query][param] = value.read if value.is_a?(::File)
+        end
+
         http_method.new(uri.request_uri, options[:query])
       else
         http_method.new(uri.request_uri)
