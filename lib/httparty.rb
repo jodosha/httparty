@@ -5,6 +5,7 @@ require 'uri'
 require 'zlib'
 require 'crack'
 require 'net/http/post/multipart'
+require 'mime/types'
 
 dir = Pathname(__FILE__).dirname.expand_path
 

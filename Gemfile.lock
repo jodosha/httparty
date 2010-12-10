@@ -3,6 +3,7 @@ PATH
   specs:
     httparty (0.6.1)
       crack (= 0.1.8)
+      mime-types (~> 1.16)
       multipart-post (= 1.0.1)
 
 GEM
@@ -27,6 +28,7 @@ GEM
       json (~> 1.4.6)
       term-ansicolor (~> 1.0.5)
     json (1.4.6)
+    mime-types (1.16)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
       daemons (>= 1.0.3)
@@ -45,6 +47,7 @@ DEPENDENCIES
   cucumber (~> 0.7)
   fakeweb (~> 1.2)
   httparty!
+  mime-types (~> 1.16)
   mongrel (~> 1.1)
   multipart-post (= 1.0.1)
   rspec (~> 1.3)

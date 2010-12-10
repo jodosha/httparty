@@ -134,7 +134,7 @@ module HTTParty
     def setup_raw_request
       @raw_request = if options[:multipart]
         options[:query].each do |param, value|
-          options[:query][param] = value.read if value.is_a?(::File)
+          options[:query][param] = UploadIO.new(value, mime_type(value), ::File.basename(value)) if value.is_a?(::File)
         end
 
         http_method.new(uri.request_uri, options[:query])
@@ -240,18 +240,23 @@ module HTTParty
       end
     end
 
-      def validate
-        raise HTTParty::RedirectionTooDeep.new(last_response), 'HTTP redirects too deep' if options[:limit].to_i <= 0
-        raise ArgumentError, 'only get, post, put, delete, head, and options methods are supported' unless SupportedHTTPMethods.include?(http_method)
-        raise ArgumentError, ':headers must be a hash' if options[:headers] && !options[:headers].is_a?(Hash)
-        raise ArgumentError, 'only one authentication method, :basic_auth or :digest_auth may be used at a time' if options[:basic_auth] && options[:digest_auth]
-        raise ArgumentError, ':basic_auth must be a hash' if options[:basic_auth] && !options[:basic_auth].is_a?(Hash)
-        raise ArgumentError, ':digest_auth must be a hash' if options[:digest_auth] && !options[:digest_auth].is_a?(Hash)
-        raise ArgumentError, ':query must be hash if using HTTP Post' if post? && !options[:query].nil? && !options[:query].is_a?(Hash)
-      end
+    def validate
+      raise HTTParty::RedirectionTooDeep.new(last_response), 'HTTP redirects too deep' if options[:limit].to_i <= 0
+      raise ArgumentError, 'only get, post, put, delete, head, and options methods are supported' unless SupportedHTTPMethods.include?(http_method)
+      raise ArgumentError, ':headers must be a hash' if options[:headers] && !options[:headers].is_a?(Hash)
+      raise ArgumentError, 'only one authentication method, :basic_auth or :digest_auth may be used at a time' if options[:basic_auth] && options[:digest_auth]
+      raise ArgumentError, ':basic_auth must be a hash' if options[:basic_auth] && !options[:basic_auth].is_a?(Hash)
+      raise ArgumentError, ':digest_auth must be a hash' if options[:digest_auth] && !options[:digest_auth].is_a?(Hash)
+      raise ArgumentError, ':query must be hash if using HTTP Post' if post? && !options[:query].nil? && !options[:query].is_a?(Hash)
+    end
 
     def post?
       Net::HTTP::Post == http_method
+    end
+
+    def mime_for(file)
+      mime = MIME::Types.type_for file.path
+      mime.empty? ? 'text/plain' : mime[0].content_type
     end
   end
 end
