@@ -132,18 +132,18 @@ module HTTParty
     end
 
     def setup_raw_request
-      @raw_request = if options[:multipart]
+      if options[:multipart]
         options[:query].each do |param, value|
           options[:query][param] = UploadIO.new(value, mime_for(value), value.path) if value.is_a?(::File)
         end
 
-        http_method.new(uri.request_uri, options[:query])
+        @raw_request = http_method.new(uri.request_uri, options[:query])
       else
-        http_method.new(uri.request_uri)
+        @raw_request = http_method.new(uri.request_uri)
+        @raw_request.body = body if body
+        @raw_request.initialize_http_header(options[:headers])
       end
 
-      @raw_request.body = body if body
-      @raw_request.initialize_http_header(options[:headers])
       @raw_request.basic_auth(username, password) if options[:basic_auth]
       setup_digest_auth if options[:digest_auth]
     end
