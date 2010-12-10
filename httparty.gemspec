@@ -106,6 +106,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<crack>, ["= 0.1.8"])
+      s.add_runtime_dependency(%q<multipart-post>, ["= 1.0.1"])
       s.add_development_dependency(%q<activesupport>, ["~> 2.3"])
       s.add_development_dependency(%q<cucumber>, ["~> 0.7"])
       s.add_development_dependency(%q<fakeweb>, ["~> 1.2"])
@@ -113,6 +114,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, ["~> 1.3"])
     else
       s.add_dependency(%q<crack>, ["= 0.1.8"])
+      s.add_dependency(%q<multipart-post>, ["= 1.0.1"])
       s.add_dependency(%q<activesupport>, ["~> 2.3"])
       s.add_dependency(%q<cucumber>, ["~> 0.7"])
       s.add_dependency(%q<fakeweb>, ["~> 1.2"])
@@ -121,6 +123,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<crack>, ["= 0.1.8"])
+    s.add_dependency(%q<multipart-post>, ["= 1.0.1"])
     s.add_dependency(%q<activesupport>, ["~> 2.3"])
     s.add_dependency(%q<cucumber>, ["~> 0.7"])
     s.add_dependency(%q<fakeweb>, ["~> 1.2"])
@@ -128,4 +131,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec>, ["~> 1.3"])
   end
 end
-

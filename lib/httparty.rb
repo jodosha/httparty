@@ -4,6 +4,7 @@ require 'net/https'
 require 'uri'
 require 'zlib'
 require 'crack'
+require 'net/http/post/multipart'
 
 dir = Pathname(__FILE__).dirname.expand_path
 
@@ -296,7 +297,8 @@ module HTTParty
     #   # which gets set as form data on the request.
     #   Foo.post('http://foo.com/resources', :query => {:bar => 'baz'})
     def post(path, options={})
-      perform_request Net::HTTP::Post, path, options
+      http_method = options[:multipart] ? Net::HTTP::Post::Multipart : Net::HTTP::Post
+      perform_request http_method, path, options
     end
 
     # Perform a PUT request to a path

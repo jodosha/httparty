@@ -567,4 +567,23 @@ describe HTTParty do
       end.should raise_error(URI::InvalidURIError)
     end
   end
+
+  describe "#post" do
+    before do
+      @path    = "http://localhost/upload"
+      @options = {
+        :multipart => true,
+        :query     => {
+          :image => open_file('butterfly.jpg')
+        }
+      }
+      @expected_options = @klass.default_options.merge(@options)
+      FakeWeb.register_uri(:post, @path, :body => "response")
+    end
+
+    it "should use multipart handler when specified" do
+      @klass.should_receive(:perform_request).with(Net::HTTP::Post::Multipart, @path, @expected_options)
+      @klass.post(@path, @options)
+    end
+  end
 end

@@ -6,7 +6,8 @@ module HTTParty
       Net::HTTP::Put,
       Net::HTTP::Delete,
       Net::HTTP::Head,
-      Net::HTTP::Options
+      Net::HTTP::Options,
+      Net::HTTP::Post::Multipart
     ]
 
     SupportedURISchemes  = [URI::HTTP, URI::HTTPS]
@@ -131,7 +132,14 @@ module HTTParty
     end
 
     def setup_raw_request
-      @raw_request = http_method.new(uri.request_uri)
+      @raw_request = if options[:multipart]
+require 'ruby-debug'
+debugger
+        http_method.new(uri.request_uri, options[:query])
+      else
+        http_method.new(uri.request_uri)
+      end
+
       @raw_request.body = body if body
       @raw_request.initialize_http_header(options[:headers])
       @raw_request.basic_auth(username, password) if options[:basic_auth]
@@ -157,15 +165,19 @@ module HTTParty
       query_string_parts = []
       query_string_parts << uri.query unless uri.query.nil?
 
-      if options[:query].is_a?(Hash)
-        query_string_parts << normalize_query(options[:default_params].merge(options[:query]))
+      if options[:multipart]
+        options[:query] = options[:default_params].merge(options[:query]) unless options[:default_params].empty?
+        nil
       else
-        query_string_parts << normalize_query(options[:default_params]) unless options[:default_params].empty?
-        query_string_parts << options[:query] unless options[:query].nil?
+        if options[:query].is_a?(Hash)
+          query_string_parts << normalize_query(options[:default_params].merge(options[:query]))
+        else
+          query_string_parts << normalize_query(options[:default_params]) unless options[:default_params].empty?
+          query_string_parts << options[:query] unless options[:query].nil?
+        end
+
+        query_string_parts.size > 0 ? query_string_parts.join('&') : nil
       end
-
-
-      query_string_parts.size > 0 ? query_string_parts.join('&') : nil
     end
 
     # Raises exception Net::XXX (http error code) if an http error occured

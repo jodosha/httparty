@@ -11,6 +11,7 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].e
 Spec::Runner.configure do |config|
   config.include HTTParty::StubResponse
   config.include HTTParty::SSLTestHelper
+  config.include HTTParty::FileHelper
   config.before(:suite) do
     FakeWeb.allow_net_connect = false
   end
