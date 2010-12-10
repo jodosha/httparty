@@ -133,8 +133,6 @@ module HTTParty
 
     def setup_raw_request
       @raw_request = if options[:multipart]
-require 'ruby-debug'
-debugger
         http_method.new(uri.request_uri, options[:query])
       else
         http_method.new(uri.request_uri)
