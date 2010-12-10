@@ -134,7 +134,7 @@ module HTTParty
     def setup_raw_request
       @raw_request = if options[:multipart]
         options[:query].each do |param, value|
-          options[:query][param] = UploadIO.new(value, mime_type(value), ::File.basename(value)) if value.is_a?(::File)
+          options[:query][param] = UploadIO.new(value, mime_for(value), ::File.basename(value)) if value.is_a?(::File)
         end
 
         http_method.new(uri.request_uri, options[:query])
