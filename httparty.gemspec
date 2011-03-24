@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
      "Manifest",
      "README.rdoc",
      "Rakefile",
-     "VERSION",
      "bin/httparty",
      "cucumber.yml",
      "examples/aaws.rb",
